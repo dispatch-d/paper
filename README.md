@@ -2,7 +2,7 @@
 
 ## Name
 
-Officially `superlongnamehardtotypeanditscaresusers`, but you can call it `dispatch-d`.
+`dispatch-d` (Dispatch - decentralised).
 
 ## Setting up an account
 
@@ -53,3 +53,16 @@ sequenceDiagram
     Note right of Server: To prevent abuse, <br>maybe limit lookups<br>of the same user to<br>once per 6 hours?
 ```
 
+## Sending messages
+
+```mermaid
+sequenceDiagram
+    Note left of Client: URL should first be <br>obtained from ULS
+    Client->>Library: Send a message to `URL`
+    Library->>Server:POST URL/some endpoint
+```
+
+### What should be done via sending messages
+
+- Read reciepts
+- Sending profile pictures, etc.
