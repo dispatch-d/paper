@@ -66,3 +66,13 @@ sequenceDiagram
 
 - Read reciepts
 - Sending profile pictures, etc.
+
+### What should not be done via messages
+
+- Group chats (these should be implemented later as their own url)
+
+## Todo
+
+- Group chats
+- Plugins?
+- Migrating client, changing your list of URLs
