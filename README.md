@@ -13,7 +13,7 @@ sequenceDiagram
         Client->>Library: Make an account for me
         rect rgb(0,100,255)
             Note right of Server: To official server
-            Client->>Server: Phone number, *Public key*
+            Client->>Server: Email, *Public key*
             Server<<->>Client: Enter verification code
             Server->>Library: Public key signed by server
         end
@@ -24,7 +24,7 @@ sequenceDiagram
         end
         %% Client->>Library: User name, optional details
         
-        %% Server->>Client: Give me a phone number
+        %% Server->>Client: Give me a email
         loop x times, to different servers
             Library->>Server: Sign me up to this server
             Note left of Server: Sent with the pkey and the sig
