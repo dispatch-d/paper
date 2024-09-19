@@ -4,6 +4,8 @@
 
 `dispatch-d` (Dispatch - decentralised).
 
+- decentralisation comes in the form of the server being run by a community, rather than a single entity.
+
 ## Basic principles
 - all accounts are password-less, instead based on an RSA keypair
 - accounts are solely identified by a hash of their public key, rather than a username
