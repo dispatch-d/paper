@@ -4,75 +4,40 @@
 
 `dispatch-d` (Dispatch - decentralised).
 
-## Setting up an account
+## Basic principles
+- all accounts are password-less, instead based on an RSA keypair
+- accounts are solely identified by a hash of their public key, rather than a username
+- all messages are encrypted by a Diffie-Hellman key exchange
+- all messages contain a "hash" signature, which is a hash of the message, encrypted with the sender's private key
+- all messages are added to a blockchain of messages, held in the server but available to all clients with authorisation to view the server.
 
+---
+
+- all servers are run by communities, which have config files, for example an allowlist, a blockchain. 
+
+
+## Messaging
+
+- to join a server, the owner must configure the allowlist to include your public key
 ```mermaid
 sequenceDiagram
-    rect rgb(0,255,100)
-        Note left of Client: Set up an account
-        Client->>Library: Make an account for me
-        rect rgb(0,100,255)
-            Note right of Server: To official server
-            Client->>Server: Email, *Public key*
-            Server<<->>Client: Enter verification code
-            Server->>Library: Public key signed by server
-        end
-        Client->>Library: Sign me up to x servers,<br>optionally specifying server(s)
-        rect rgb(0,100,255)
-            Note right of Server: To official server/<br>community-ran/<br>custom
-            Library<<->>Server: Can I have y server URLs?
-        end
-        %% Client->>Library: User name, optional details
-        
-        %% Server->>Client: Give me a email
-        loop x times, to different servers
-            Library->>Server: Sign me up to this server
-            Note left of Server: Sent with the pkey and the sig
-            Note over Server: Checks the pkey sig<br>to see if it is correct
-            Server->>Library: A URL for the client to see messages,<br>with an access key
-            Library->>Client: Saved to the client
-        end
-        Client->>Library:Username
-        rect rgb(0,100,255)
-            Note right of Server: To official server
-            Library->>Server: (Username, URLs) or link to custom 'DNS'<br>(elaborated in paper)
-        end
-    end
+    Note left of Client: Client joining process
+    Client->>Server: <Here> is my public key
+    Server->>Client: Confirm your identity by signing <this> with your private key
+    Client->>Server: <Here> is the signed message
+    Server->>Client: You are now allowed to send messages <br>when you suffix all messages with that signed message <br> it will time out in 6 hours (customisable by server)
+    Server->>Client: Here is the latest blockchain.
+    
+    Note left of Client: Recieving (a) message(s)
+     
+    Server->>Client: Updated Blockchain
+
+    Note left of Client: Sending a message
+
+    Client->>Server: I am sending <this> message <br>(including a hash portion with the content <br> of this private-key encrypted message hash) <br> suffixed with the earlier signed message
 ```
 
-## A custom 'DNS' for users
-
-@thisiscoding1234 dubbs it 'ULS' (Username Lookup System).
-
-```mermaid
-sequenceDiagram
-    Library->>Server: Username
-    Server->>Library: A random URL of the user
-    Note left of Library: This URL is then stored<br>on the client for<br>further use
-    Note left of Library: In case this URL is lost, <br>another can always be<br>requested from server
-    Note right of Server: To prevent abuse, <br>maybe limit lookups<br>of the same user to<br>once per 6 hours?
-```
-
-## Sending messages
-
-```mermaid
-sequenceDiagram
-    Note left of Client: URL should first be <br>obtained from ULS
-    Client->>Library: Send a message to `URL`
-    Library->>Server:POST URL/some endpoint
-```
-
-### What should be done via sending messages
-
-- Read reciepts
-- Sending profile pictures, etc.
-
-### What should not be done via messages
-
-- Group chats (these should be implemented later as their own url)
-
-## Todo
-
-- Group chats
-- Plugins?
-- Migrating client, changing your list of URLs
+## How will this work in practice?
+- the server will probably be written in either Rust, Flask, or Node.js.
+- to achieve duplex or duplex-like communication, our options include WebSockets, long-polling, or server-sent events.
+- the client will be a javascript library - the frontend will be nothing special, just a simple chat app interfacing with the library which does the heavy lifting.
